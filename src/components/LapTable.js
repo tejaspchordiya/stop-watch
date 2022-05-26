@@ -2,6 +2,21 @@ import LapTableRow from "./LapTableRow";
 
 const LapTable = ({ history }) => {
 
+    function addLapRows() {
+        const lapRows = [];
+        for (let index = history.length - 1; index >= 0; index--) {
+            const loggedTime = history[index];
+            const lapTime = index === 0 ? loggedTime : loggedTime - history[index - 1];
+            lapRows.push(
+                <LapTableRow key={index.toString()}
+                    loggedTime={loggedTime}
+                    index={index}
+                    lapTime={lapTime} />
+            )
+        }
+        return lapRows;
+    }
+
     return (
         <>
             {history.length ?
@@ -11,15 +26,7 @@ const LapTable = ({ history }) => {
                         <span>Lap times</span>
                         <span>Overall time</span>
                     </div>
-                    {history.map((loggedTime, index, orgHistoryArr) => {
-                        const lapTime = index === 0 ? orgHistoryArr[index] : orgHistoryArr[index] - orgHistoryArr[index - 1];
-                        return (
-                            <LapTableRow key={loggedTime.toString()}
-                                loggedTime={loggedTime}
-                                index={index}
-                                lapTime={lapTime} />
-                        )
-                    })}
+                    {addLapRows()}
                 </div>
                 : null
             }
